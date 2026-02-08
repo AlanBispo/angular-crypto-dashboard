@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CryptoService } from '../../../../services/crypto.service';
 import { Moeda } from '../../../../models/moeda.model';
@@ -14,18 +14,34 @@ export class CryptoTableComponent implements OnInit {
   private servicoCripto = inject(CryptoService);
 
   listaDeMoedas = signal<Moeda[]>([]);
-  
-  // NOVO: Signal para controlar se a tabela está a carregar/atualizar
   estaCarregando = signal(false);
+
+  termoDeBusca = signal('');
+
+  listaFiltrada = computed(() => {
+    const termo = this.termoDeBusca().toLowerCase();
+    
+    if (!termo) {
+      return this.listaDeMoedas();
+    }
+
+    return this.listaDeMoedas().filter(moeda => 
+      moeda.name.toLowerCase().includes(termo) || 
+      moeda.symbol.toLowerCase().includes(termo)
+    );
+  });
 
   ngOnInit(): void {
     this.obterDadosDoMercado();
   }
 
-  // Função principal para carregar dados
+  atualizarBusca(evento: Event) {
+    const elementoInput = evento.target as HTMLInputElement;
+    this.termoDeBusca.set(elementoInput.value);
+  }
+
   obterDadosDoMercado() {
     this.estaCarregando.set(true);
-
     this.servicoCripto.listarMoedas().subscribe({
       next: (dados) => {
         setTimeout(() => {
@@ -33,13 +49,10 @@ export class CryptoTableComponent implements OnInit {
           this.estaCarregando.set(false);
         }, 500);
       },
-      error: (erro) => {
-        console.error('Erro ao atualizar:', erro);
-        this.estaCarregando.set(false);
-      }
+      error: () => this.estaCarregando.set(false)
     });
   }
-  
+
   atualizarAgora() {
     this.obterDadosDoMercado();
   }

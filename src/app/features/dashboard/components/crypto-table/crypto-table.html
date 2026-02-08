@@ -2,9 +2,18 @@
   <div class="cabecalho-tabela">
     <h2>Principais Criptomoedas</h2>
     
-    <button (click)="atualizarAgora()" [disabled]="estaCarregando()" class="botao-atualizar">
-      {{ estaCarregando() ? 'A atualizar...' : '🔄 Atualizar Agora' }}
-    </button>
+    <div class="controles">
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar moeda..." 
+        (input)="atualizarBusca($event)"
+        class="input-busca"
+      >
+      
+      <button (click)="atualizarAgora()" [disabled]="estaCarregando()" class="botao-atualizar">
+        {{ estaCarregando() ? 'A atualizar...' : '🔄 Atualizar' }}
+      </button>
+    </div>
   </div>
 
   <table [class.efeito-carregando]="estaCarregando()">
@@ -17,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (moeda of listaDeMoedas(); track moeda.id) {
+      @for (moeda of listaFiltrada(); track moeda.id) {
         <tr>
           <td class="coluna-nome">
             <img [src]="moeda.image" [alt]="moeda.name" width="24" height="24">
@@ -32,7 +41,9 @@
         </tr>
       } @empty {
         <tr>
-          <td colspan="4">Buscando dados do mercado...</td>
+          <td colspan="4" class="sem-resultados">
+            Nenhuma moeda encontrada para "{{ termoDeBusca() }}"
+          </td>
         </tr>
       }
     </tbody>
