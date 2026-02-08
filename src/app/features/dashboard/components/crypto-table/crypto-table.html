@@ -1,31 +1,27 @@
-<div class="container-tabela">
-  <h2>Mercado Hoje</h2>
+<div class="cartao-tabela">
+  <h2>Principais Criptomoedas</h2>
 
   <table>
     <thead>
       <tr>
         <th>Moeda</th>
-        <th>Preço (BRL)</th>
-        <th>Variação 24h</th>
+        <th>Preço Atual</th>
+        <th>Variação (24h)</th>
         <th>Valor de Mercado</th>
       </tr>
     </thead>
     <tbody>
       @for (moeda of moedas(); track moeda.id) {
         <tr>
-          <td class="info-moeda">
-            <img [src]="moeda.image" [alt]="moeda.name" width="30">
-            <div>
-              <span class="nome">{{ moeda.name }}</span>
-              <span class="simbolo">{{ moeda.symbol | uppercase }}</span>
-            </div>
+          <td class="coluna-nome">
+            <img [src]="moeda.image" [alt]="moeda.name" width="24" height="24">
+            <strong>{{ moeda.name }}</strong>
           </td>
-
+          
           <td>{{ moeda.current_price | currency:'BRL' }}</td>
 
-          <td [class.positivo]="moeda.price_change_percentage_24h > 0"
-              [class.negativo]="moeda.price_change_percentage_24h < 0">
-            
+          <td [class.texto-verde]="moeda.price_change_percentage_24h > 0"
+              [class.texto-vermelho]="moeda.price_change_percentage_24h < 0">
             {{ moeda.price_change_percentage_24h | number:'1.2-2' }}%
           </td>
 
@@ -33,7 +29,7 @@
         </tr>
       } @empty {
         <tr>
-          <td colspan="4" class="carregando">Carregando dados do mercado...</td>
+          <td colspan="4">Buscando dados do mercado...</td>
         </tr>
       }
     </tbody>
