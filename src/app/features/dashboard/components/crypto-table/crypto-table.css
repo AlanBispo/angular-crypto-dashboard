@@ -97,3 +97,42 @@ tr td[colspan] {
   color: #94a3b8;
   font-style: italic;
 }
+
+.cabecalho-tabela {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.botao-atualizar {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.botao-atualizar:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.botao-atualizar:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.efeito-carregando {
+  animation: piscar 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes piscar {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}

@@ -1,7 +1,13 @@
 <div class="cartao-tabela">
-  <h2>Principais Criptomoedas</h2>
+  <div class="cabecalho-tabela">
+    <h2>Principais Criptomoedas</h2>
+    
+    <button (click)="atualizarAgora()" [disabled]="estaCarregando()" class="botao-atualizar">
+      {{ estaCarregando() ? 'A atualizar...' : '🔄 Atualizar Agora' }}
+    </button>
+  </div>
 
-  <table>
+  <table [class.efeito-carregando]="estaCarregando()">
     <thead>
       <tr>
         <th>Moeda</th>
@@ -11,20 +17,17 @@
       </tr>
     </thead>
     <tbody>
-      @for (moeda of moedas(); track moeda.id) {
+      @for (moeda of listaDeMoedas(); track moeda.id) {
         <tr>
           <td class="coluna-nome">
             <img [src]="moeda.image" [alt]="moeda.name" width="24" height="24">
             <strong>{{ moeda.name }}</strong>
           </td>
-          
           <td>{{ moeda.current_price | currency:'BRL' }}</td>
-
           <td [class.texto-verde]="moeda.price_change_percentage_24h > 0"
               [class.texto-vermelho]="moeda.price_change_percentage_24h < 0">
             {{ moeda.price_change_percentage_24h | number:'1.2-2' }}%
           </td>
-
           <td>{{ moeda.market_cap | currency:'BRL':'symbol':'1.0-0' }}</td>
         </tr>
       } @empty {

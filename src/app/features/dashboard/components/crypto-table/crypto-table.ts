@@ -5,32 +5,42 @@ import { Moeda } from '../../../../models/moeda.model';
 
 @Component({
   selector: 'app-crypto-table',
-  standalone: true, 
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './crypto-table.html',
   styleUrl: './crypto-table.css'
 })
-
 export class CryptoTableComponent implements OnInit {
-  
-  private cryptoService = inject(CryptoService);
+  private servicoCripto = inject(CryptoService);
 
-  moedas = signal<Moeda[]>([]);
+  listaDeMoedas = signal<Moeda[]>([]);
+  
+  // NOVO: Signal para controlar se a tabela está a carregar/atualizar
+  estaCarregando = signal(false);
 
   ngOnInit(): void {
-    this.carregarDados();
+    this.obterDadosDoMercado();
   }
 
-  // Função para buscar os dados
-  carregarDados() {
-    this.cryptoService.listarMoedas().subscribe({
-      next: (dadosRecebidos) => {
-        this.moedas.set(dadosRecebidos);
-        console.log('Dados carregados com sucesso:', dadosRecebidos);
+  // Função principal para carregar dados
+  obterDadosDoMercado() {
+    this.estaCarregando.set(true);
+
+    this.servicoCripto.listarMoedas().subscribe({
+      next: (dados) => {
+        setTimeout(() => {
+          this.listaDeMoedas.set(dados);
+          this.estaCarregando.set(false);
+        }, 500);
       },
       error: (erro) => {
-        console.error('Erro ao buscar moedas:', erro);
+        console.error('Erro ao atualizar:', erro);
+        this.estaCarregando.set(false);
       }
     });
+  }
+  
+  atualizarAgora() {
+    this.obterDadosDoMercado();
   }
 }
