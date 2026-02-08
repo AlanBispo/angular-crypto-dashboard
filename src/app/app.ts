@@ -1,12 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CryptoTableComponent } from './features/dashboard/components/crypto-table/crypto-table';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, CryptoTableComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('angular-crypto-dashboard');
+export class AppComponent {
+  tituloDoApp = signal('💰 Meu Dashboard Cripto');
 }
