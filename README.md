@@ -1,59 +1,36 @@
-# AngularCryptoDashboard
+# 💰 Angular Crypto Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+Disponível para visualização em: https://angular-crypto-dashboard.vercel.app/
 
-## Development server
+**OBS:** Esse projeto consulta uma API pública com limites de requisições, por isso ao navegar pela paginação, provavelmente irá apresentar um erro.
 
-To start a local development server, run:
+Um dashboard moderno de monitoramento de criptomoedas desenvolvido para explorar as funcionalidades mais recentes do **Angular 21**. O foco principal deste projeto é a alta performance e a experiência do desenvolvedor (DX), utilizando um fluxo de dados totalmente reativo.
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🚀 Funcionalidades Principais
 
-## Code scaffolding
+* **Gestão de Estado com Signals:** Utilização de `signal`, `computed` e `effect` para um controle de estado granular e eficiente.
+* **Zoneless Change Detection:** Implementação sem `zone.js`, reduzindo o overhead de processamento e melhorando o tempo de resposta da interface.
+* **Filtro em Tempo Real:** Busca instantânea por nome ou símbolo da moeda sem chamadas desnecessárias à rede.
+* **Paginação Inteligente:** Navegação fluida entre os dados da API com controle de estado de carregamento.
+* **Localização pt-BR:** Formatação automática de valores monetários e números para o padrão brasileiro (BRL).
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🛠️ Tecnologias e Ferramentas
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+* **Angular 21:** Framework principal (Standalone Components).
+* **TypeScript:** Tipagem estrita para maior segurança no desenvolvimento.
+* **CoinGecko API:** Fonte de dados em tempo real para o mercado de cripto.
+* **CSS Moderno:** Estilização focada em UX, incluindo animações de feedback (Blink/Loading).
 
-```bash
-ng generate --help
-```
+---
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🔧 Como Executar
+1. Clone o repositório em sua máquina.
+2. Instale as dependências:
+   `npm install`
+3. Inicie o servidor de desenvolvimento:
+   `ng serve`
+4. Acesse no navegador: http://localhost:4200
