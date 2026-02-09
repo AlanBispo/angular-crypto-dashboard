@@ -5,28 +5,24 @@ import { environment } from '../../environments/environment';
 import { Moeda } from '../models/moeda.model';
 
 @Injectable({
-  providedIn: 'root' // Isso é CRUCIAL: diz que é um Serviço Global
+  providedIn: 'root'
 })
 export class CryptoService {
-  // Injeta o cliente HTTP (Jeito moderno do Angular 17+)
+
   private http = inject(HttpClient);
   
-  // Pega a URL que definimos no environment.ts
   private readonly baseUrl = environment.apiUrl;
 
   /**
    * Busca a lista de moedas.
    * Retorna um Observable (fluxo de dados) contendo um array de Moedas.
    */
-  listarMoedas(moedaBase: string = 'brl'): Observable<Moeda[]> {
-    const params = {
-      vs_currency: moedaBase,
-      order: 'market_cap_desc',
-      per_page: 10,
-      page: 1,
-      sparkline: false
-    };
-
-    return this.http.get<Moeda[]>(`${this.baseUrl}/coins/markets`, { params });
+  listarMoedas(pagina: number = 1, itensPorPagina: number = 20) {
+    const timestamp = new Date().getTime();
+    const url = `${this.baseUrl}/coins/markets?vs_currency=brl&order=market_cap_desc&per_page=${itensPorPagina}&page=${pagina}&sparkline=false&_t=${timestamp}`;
+    
+    console.log('Chamando API:', url);
+    
+    return this.http.get<Moeda[]>(url);
   }
 }

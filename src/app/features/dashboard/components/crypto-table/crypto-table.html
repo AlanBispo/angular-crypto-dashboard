@@ -48,4 +48,23 @@
       }
     </tbody>
   </table>
+  <div class="paginacao">
+    <button 
+      (click)="paginaAnterior()" 
+      [disabled]="paginaAtual() === 1 || estaCarregando()"
+      class="btn-pag">
+      ⬅ Anterior
+    </button>
+
+    <span class="info-pagina">
+      Página <strong>{{ paginaAtual() }}</strong>
+    </span>
+
+    <button 
+      (click)="proximaPagina()" 
+      [disabled]="estaCarregando()"
+      class="btn-pag">
+      Próxima ➡
+    </button>
+  </div>
 </div>

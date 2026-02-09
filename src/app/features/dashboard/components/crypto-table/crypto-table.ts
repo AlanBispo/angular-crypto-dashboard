@@ -18,6 +18,9 @@ export class CryptoTableComponent implements OnInit {
 
   termoDeBusca = signal('');
 
+  paginaAtual = signal(1);
+  itensPorPagina = 10;
+
   listaFiltrada = computed(() => {
     const termo = this.termoDeBusca().toLowerCase();
     
@@ -40,17 +43,37 @@ export class CryptoTableComponent implements OnInit {
     this.termoDeBusca.set(elementoInput.value);
   }
 
-  obterDadosDoMercado() {
+  obterDadosDoMercado(paginaParaBuscar?: number) {
     this.estaCarregando.set(true);
-    this.servicoCripto.listarMoedas().subscribe({
+    const pagina = paginaParaBuscar || this.paginaAtual();
+
+    this.servicoCripto.listarMoedas(pagina, this.itensPorPagina).subscribe({
       next: (dados) => {
-        setTimeout(() => {
-          this.listaDeMoedas.set(dados);
-          this.estaCarregando.set(false);
-        }, 500);
+        this.listaDeMoedas.set(dados);
+        this.estaCarregando.set(false);
       },
       error: () => this.estaCarregando.set(false)
     });
+  }
+
+  proximaPagina() {
+    if (this.estaCarregando()) return;
+    
+    this.termoDeBusca.set(''); 
+    
+    this.paginaAtual.update(p => p + 1);
+    
+    this.obterDadosDoMercado();
+  }
+
+  paginaAnterior() {
+    if (this.paginaAtual() > 1 && !this.estaCarregando()) {
+      this.termoDeBusca.set('');
+      this.paginaAtual.update(p => p - 1);
+      
+      console.log('Voltando para a página:', this.paginaAtual());
+      this.obterDadosDoMercado();
+    }
   }
 
   atualizarAgora() {
