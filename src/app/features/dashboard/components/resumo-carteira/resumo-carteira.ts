@@ -13,7 +13,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class ResumoCarteiraComponent {
   private servicoCripto = inject(CryptoService);
 
-  // Transformamos o Observable da API em um Signal de forma fácil
   todasAsMoedas = toSignal(this.servicoCripto.listarMoedas(), { initialValue: [] });
 
   // Simulando as moedas que o usuário "possui"
@@ -22,8 +21,7 @@ export class ResumoCarteiraComponent {
     { id: 'ethereum', quantidade: 2.0 }
   ]);
 
-  // 'computed' é um Signal que calcula um valor baseado em outros Signals
-  // Se o preço do Bitcoin mudar, o saldoTotal atualiza sozinho!
+  // Se o preço do Bitcoin mudar, o saldoTotal atualiza
   saldoTotal = computed(() => {
     let total = 0;
     const moedasMercado = this.todasAsMoedas();

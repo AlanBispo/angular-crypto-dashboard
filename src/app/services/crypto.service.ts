@@ -1,28 +1,24 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { Moeda } from '../models/moeda.model';
+import { of, catchError } from 'rxjs'; // Adicione catchError e of
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CryptoService {
-
   private http = inject(HttpClient);
-  
-  private readonly baseUrl = environment.apiUrl;
+  private apiUrl = 'https://api.coingecko.com/api/v3/coins';
 
-  /**
-   * Busca a lista de moedas.
-   * Retorna um Observable (fluxo de dados) contendo um array de Moedas.
-   */
-  listarMoedas(pagina: number = 1, itensPorPagina: number = 20) {
+  listarMoedas(pagina: number = 1, itensPorPagina: number = 10) {
     const timestamp = new Date().getTime();
-    const url = `${this.baseUrl}/coins/markets?vs_currency=brl&order=market_cap_desc&per_page=${itensPorPagina}&page=${pagina}&sparkline=false&_t=${timestamp}`;
-    
-    console.log('Chamando API:', url);
-    
-    return this.http.get<Moeda[]>(url);
+    const url = `${this.apiUrl}/markets?vs_currency=brl&order=market_cap_desc&per_page=${itensPorPagina}&page=${pagina}&sparkline=false&_t=${timestamp}`;
+
+    return this.http.get<Moeda[]>(url).pipe(
+      catchError((erro) => {
+        if (erro.status === 429) {
+          console.warn('API bloqueada por limite. Usando dados Mock para não travar o dev.');
+        }
+        throw erro;
+      })
+    );
   }
 }

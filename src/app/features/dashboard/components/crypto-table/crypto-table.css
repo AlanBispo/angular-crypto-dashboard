@@ -172,3 +172,29 @@ tr td[colspan] {
   font-size: 0.9rem;
   color: #64748b;
 }
+
+.alerta-erro {
+  background-color: #fef2f2;
+  border-left: 4px solid #ef4444;
+  color: #b91c1c;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  animation: deslizarParaBaixo 0.3s ease-out;
+}
+
+@keyframes deslizarParaBaixo {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

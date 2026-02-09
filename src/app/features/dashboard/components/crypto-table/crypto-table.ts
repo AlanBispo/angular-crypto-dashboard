@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal, computed, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { CryptoService } from '../../../../services/crypto.service';
 import { Moeda } from '../../../../models/moeda.model';
 
@@ -12,14 +12,15 @@ import { Moeda } from '../../../../models/moeda.model';
 })
 export class CryptoTableComponent implements OnInit {
   private servicoCripto = inject(CryptoService);
+  private platformId = inject(PLATFORM_ID);
 
   listaDeMoedas = signal<Moeda[]>([]);
   estaCarregando = signal(false);
 
   termoDeBusca = signal('');
-
   paginaAtual = signal(1);
   itensPorPagina = 10;
+  mensagemErro = signal<string | null>(null);
 
   listaFiltrada = computed(() => {
     const termo = this.termoDeBusca().toLowerCase();
@@ -43,16 +44,28 @@ export class CryptoTableComponent implements OnInit {
     this.termoDeBusca.set(elementoInput.value);
   }
 
-  obterDadosDoMercado(paginaParaBuscar?: number) {
+ obterDadosDoMercado(paginaParaBuscar?: number) {
     this.estaCarregando.set(true);
+    this.mensagemErro.set(null);
+    
     const pagina = paginaParaBuscar || this.paginaAtual();
 
     this.servicoCripto.listarMoedas(pagina, this.itensPorPagina).subscribe({
       next: (dados) => {
         this.listaDeMoedas.set(dados);
         this.estaCarregando.set(false);
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       },
-      error: () => this.estaCarregando.set(false)
+      error: (err) => {
+        this.estaCarregando.set(false);
+        if (err.status === 429) {
+          this.mensagemErro.set('Limite de consultas atingido. Aguarde 1 minuto.');
+        } else {
+          this.mensagemErro.set('Erro ao carregar dados. Tente novamente.');
+        }
+      }
     });
   }
 
